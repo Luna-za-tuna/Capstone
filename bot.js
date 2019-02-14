@@ -7,7 +7,7 @@ const commandHandlerForCommandName = {};
 var bot = new eris.Client('NTQ0MzAzMTcwNTMzNDU3OTUz.D0ddGA.bRe_dJ0lvwpTBRKs0UsmLs7xYUQ');
 
 // handles a test command by saying hi
-commandHandlerForCommandName['sayhi'] => {
+commandHandlerForCommandName['sayhi'] = (msg) => {
     return msg.channel.createMessage('hi');
 };
 
@@ -27,11 +27,11 @@ bot.on('messageCreate', async (msg) => {
     }
     
     //get command
-    const parts - content.split(' ').map(s => s.trim()).filter(s => s);
+    const parts = content.split(' ').map(s => s.trim()).filter(s => s);
     const commandName = parts[0].substr(PREFIX.length)
     
     //get handler
-    cosnt commandHandler = commandHandlerForCommandName[commandName];
+    const commandHandler = commandHandlerForCommandName[commandName];
     if (!commandHandler)
     {
         return msg.channel.createMessage('invalid command');
@@ -39,7 +39,7 @@ bot.on('messageCreate', async (msg) => {
     
     try 
     {
-        await commandHandler();
+        await commandHandler(msg);
     } 
     catch (err)
     {
