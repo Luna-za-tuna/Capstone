@@ -4,13 +4,16 @@ const PREFIX = '!';
 var auth = require('./auth.json');
 // Initialize Discord Bot
 const commandHandlerForCommandName = {};
-var bot = new eris.Client('NTQ0MzAzMTcwNTMzNDU3OTUz.D0ddGA.bRe_dJ0lvwpTBRKs0UsmLs7xYUQ');
+const token = auth.token;
+var bot = new eris.Client(token);
 
 // handles a test command by saying hi
 commandHandlerForCommandName['sayhi'] = (msg) => {
     return msg.channel.createMessage('hi');
 };
 
+
+//This shouldnt change really
 bot.on('messageCreate', async (msg) => {
     const content = msg.content;
     
@@ -37,6 +40,10 @@ bot.on('messageCreate', async (msg) => {
         return msg.channel.createMessage('invalid command');
     }
     
+    //get arguments
+    const args = parts.slice(1);
+    
+    //run command
     try 
     {
         await commandHandler(msg);
