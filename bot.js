@@ -15,11 +15,22 @@ commandHandlerForCommandName['sayhi'] = (msg, args) => {
 
 //TODO: when someone joins the server, add initial role to them
 
-bot.on('guildMemberAdd', (member) => 
+bot.on('guildMemberAdd', (guild, member) => 
 {
-     var annouceChannel = member.channels.get("544304255515754500");
+    /* var annouceChannel = member.channels.get("544304255515754500");
      console.log(announceChannel);
-     annouceChannel.send(member + "Welcome to Truman's ACM Discord. Make sure to ask for permissions to view other channels.");
+     annouceChannel.send(member + "Welcome to Truman's ACM Discord. Make sure to ask for permissions to view other channels.");*/
+     var channelList = guild.channels
+     
+     for (var i in channelList)
+     {
+         console.log(channelList[i]);
+        /*if (channelList[i].name == "general")
+        {
+            channelList[i].send(member + "Welcome to " + guild.name + ". Make sure to ask for permissions to view other channels.");
+        }*/
+     };
+            
      
 });
 
