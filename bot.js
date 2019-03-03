@@ -6,6 +6,8 @@ var auth = require('./auth.json');
 const commandHandlerForCommandName = {};
 const token = auth.token;
 var bot = new eris.Client(token);
+var guildOb;
+var announceChannel
 
 
 // handles a test command by saying hi
@@ -14,18 +16,33 @@ commandHandlerForCommandName['sayhi'] = (msg, args) =>
     return msg.channel.createMessage('hi');
 };
 
-//TODO: when someone joins the server, add initial role to them
+// Handles setting the announcements channel
+commandHandlerForCommandName['setAnnounce'] = (msg, args) =>
+{
+    checkChannel = args[0];
+    console.log(checkChannel);
+    var set = false;
+    guildOb.channels.forEach(channel => 
+    {
+        if (channel.name == checkChannel)
+        {
+            announceChannel = channel;
+            set = true;
+            return;
+        }
+    });
+    if (!set)
+    {
+        msg.channel.createMessage('Channel does not exist');
+    }
+};
 
 bot.on('guildMemberAdd', async (guild, member) => 
 {
-     
-    guild.channels.forEach(channel => 
-    { 
-        if (channel.name == "general")
-        {
-            channel.createMessage(member + "Welcome to fuck this. Make sure to ask for permissions to view other channels.");
-        } 
-    });
+    // announces person joining.    
+    announceChannel.createMessage(member + "Welcome to fuck this. Make sure to ask for permissions to view other channels.");
+    //Adds initial role to someone who joins
+    //TODO: check to see if role exists first
     var initialRole 
     guild.roles.forEach(role => 
     {
@@ -35,7 +52,7 @@ bot.on('guildMemberAdd', async (guild, member) =>
             return true;
         }
     });
-    console.log("initial role" + initialRole);
+    //console.log("initial role" + initialRole);
     member.addRole(initialRole, "for joining you bich");
 });
 
@@ -43,6 +60,9 @@ bot.on('guildMemberAdd', async (guild, member) =>
 //gotta check each persons role and move it forward at a certain time. 
 //if they dont have one, add one, if they hit the limit, kick them from the server
 
+//TODO: add event handler for people who leave the server
+//TODO: record changes to messages
+//TODO: record deleted messages 
 
 
 //This shouldnt change really. Main function that controls which 
@@ -89,8 +109,20 @@ bot.on('messageCreate', async (msg) =>
     }
 });
 
-bot.on('ready', function (evt) {
+bot.on('ready', function (evt) 
+{
     console.log('connected');
+    bot.guilds.forEach(guild => 
+    {
+        guildOb = guild;
+    });
+    guildOb.channels.forEach(channel => 
+    { 
+        if (channel.name == "general")
+        {
+            announceChannel = channel;
+        } 
+    });
 });
 
 bot.on('error', err => {
@@ -98,3 +130,4 @@ bot.on('error', err => {
 });
 
 bot.connect();
+//TODO: possibly use regex to block language
