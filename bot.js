@@ -9,7 +9,8 @@ var bot = new eris.Client(token);
 
 
 // handles a test command by saying hi
-commandHandlerForCommandName['sayhi'] = (msg, args) => {
+commandHandlerForCommandName['sayhi'] = (msg, args) => 
+{
     return msg.channel.createMessage('hi');
 };
 
@@ -18,26 +19,24 @@ commandHandlerForCommandName['sayhi'] = (msg, args) => {
 bot.on('guildMemberAdd', async (guild, member) => 
 {
      
-    guild.channels.forEach(channel => { 
-        console.log(channel.name + " stuff");
+    guild.channels.forEach(channel => 
+    { 
         if (channel.name == "general")
         {
             channel.createMessage(member + "Welcome to fuck this. Make sure to ask for permissions to view other channels.");
-        }
-        
+        } 
     });
-     
-     /*guilds.channels.foreach(channel=> {
-     
-         console.log("in loop");
-         console.log(channel.name);
-        /*if (channelList[i].name == "general")
+    var initialRole 
+    guild.roles.forEach(role => 
+    {
+        if (role.name == 'one')
         {
-            channelList[i].send(member + "Welcome to " + guild.name + ". Make sure to ask for permissions to view other channels.");
+            initialRole = role.id
+            return true;
         }
-     });*/
-            
-     
+    });
+    console.log("initial role" + initialRole);
+    member.addRole(initialRole, "for joining you bich");
 });
 
 //TODO: need to make event handler to deal with changing roles. 
@@ -48,7 +47,8 @@ bot.on('guildMemberAdd', async (guild, member) =>
 
 //This shouldnt change really. Main function that controls which 
 //command is run. 
-bot.on('messageCreate', async (msg) => {
+bot.on('messageCreate', async (msg) => 
+{
     const content = msg.content;
     
     //ignore direct messages
